@@ -5,15 +5,21 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('background.png'); /* Фоновое изображение <button class="citation-flag" data-index="6"> */
-    background-size: cover; /* Масштабирование под размер экрана */
-    background-repeat: no-repeat; /* Запрет повторения фона */
-    background-position: center; /* Центрирование фона */
-    min-height: 100vh; /* Полная высота экрана */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
 }
 
 h1 {
     color: white; /* Цвет текста для контраста с фоном */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Тень для улучшения читаемости */
+}
+
+#score {
+    color: white;
+    font-size: 20px;
+    margin-bottom: 20px;
 }
 
 .dice {
@@ -25,6 +31,11 @@ h1 {
     display: inline-block;
     margin: 10px;
     border: 1px solid #fff; /* Белая рамка для видимости на фоне */
+    cursor: pointer;
+}
+
+.dice.selected {
+    border: 3px solid yellow; /* Выделение выбранных костей */
 }
 
 button {
@@ -35,6 +46,10 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+button:disabled {
+    background-color: rgba(200, 200, 200, 0.8); /* Неактивная кнопка */
 }
 
 /* Адаптация для мобильных устройств */
