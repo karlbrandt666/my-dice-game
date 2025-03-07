@@ -1,19 +1,17 @@
 function rollDice() {
-    // Проверка существования контейнера для костей
     const container = document.getElementById('dice-container');
-    if (!container) { // Если элемент не найден <button class="citation-flag" data-index="5">
+    if (!container) {
         console.error('Контейнер для костей не найден!');
-        return; // Прерываем выполнение функции
+        return;
     }
 
-    // Очистка предыдущих костей
-    container.innerHTML = '';
+    container.innerHTML = ''; // Очистка предыдущих костей
 
-    // Создание 6 костей
     for (let i = 0; i < 6; i++) {
         const die = document.createElement('div');
         die.className = 'dice';
-        die.style.backgroundImage = `url('dice-${Math.floor(Math.random() * 6) + 1}.png')`;
+        const value = Math.floor(Math.random() * 6) + 1; // Случайное значение кости
+        die.style.backgroundImage = `url('dice-${value}.png')`; // Установка изображения
         container.appendChild(die);
     }
 }
