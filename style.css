@@ -1,3 +1,10 @@
+/* Базовые стили */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
 .dice {
     width: 60px;
     height: 60px;
@@ -7,4 +14,29 @@
     display: inline-block;
     margin: 10px;
     border: 1px solid #333;
+}
+
+button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin-top: 20px;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px; /* Уменьшите размер текста */
+        padding: 10px;   /* Добавьте отступы */
+    }
+
+    .dice {
+        width: 50px;     /* Уменьшите размер костей */
+        height: 50px;
+        margin: 5px;     /* Уменьшите отступы между элементами */
+    }
+
+    button {
+        font-size: 16px; /* Увеличьте размер кнопок */
+        padding: 10px 20px;
+    }
 }
