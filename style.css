@@ -2,7 +2,18 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    padding: 20px;
+    margin: 0;
+    padding: 0;
+    background-image: url('background.png'); /* Фоновое изображение <button class="citation-flag" data-index="6"> */
+    background-size: cover; /* Масштабирование под размер экрана */
+    background-repeat: no-repeat; /* Запрет повторения фона */
+    background-position: center; /* Центрирование фона */
+    min-height: 100vh; /* Полная высота экрана */
+}
+
+h1 {
+    color: white; /* Цвет текста для контраста с фоном */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Тень для улучшения читаемости */
 }
 
 .dice {
@@ -13,30 +24,34 @@ body {
     background-position: center;
     display: inline-block;
     margin: 10px;
-    border: 1px solid #333;
+    border: 1px solid #fff; /* Белая рамка для видимости на фоне */
 }
 
 button {
     font-size: 18px;
     padding: 10px 20px;
     margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный фон кнопки */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 /* Адаптация для мобильных устройств */
 @media (max-width: 600px) {
     body {
-        font-size: 14px; /* Уменьшите размер текста */
-        padding: 10px;   /* Добавьте отступы */
+        font-size: 14px; /* Уменьшение размера текста */
+        padding: 10px;   /* Добавление отступов */
     }
 
     .dice {
-        width: 50px;     /* Уменьшите размер костей */
+        width: 50px;     /* Уменьшение размера костей */
         height: 50px;
-        margin: 5px;     /* Уменьшите отступы между элементами */
+        margin: 5px;     /* Уменьшение отступов между элементами */
     }
 
     button {
-        font-size: 16px; /* Увеличьте размер кнопок */
+        font-size: 16px; /* Увеличение размера кнопок */
         padding: 10px 20px;
     }
 }
