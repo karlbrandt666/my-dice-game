@@ -8,8 +8,10 @@
 </head>
 <body>
     <h1>Игра в кости</h1>
+    <p id="score">Очки: 0</p>
     <div id="dice-container"></div>
     <button onclick="rollDice()">Бросить кости</button>
+    <button onclick="endTurn()" disabled id="end-turn-btn">Завершить ход</button>
     <script src="script.js"></script>
 </body>
 </html>
