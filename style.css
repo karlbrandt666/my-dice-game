@@ -22,22 +22,6 @@ body {
     justify-content: center;
 }
 
-#welcome-modal button {
-    margin-top: 20px;
-    padding: 15px 30px;
-    background: #444;
-    border: none;
-    color: white;
-    cursor: pointer;
-}
-
-/* Адаптивный дизайн для мобильных <button class="citation-flag" data-index="7"> */
-@media (max-width: 600px) {
-    #welcome-modal h2 {
-        font-size: 24px;
-    }
-}
-
 .hidden { display: none; }
 
 .dice {
@@ -66,4 +50,10 @@ button {
 
 button:disabled {
     opacity: 0.5;
+}
+
+/* Адаптация для мобильных <button class="citation-flag" data-index="7"> */
+@media (max-width: 600px) {
+    .dice { width: 50px; height: 50px; }
+    button { font-size: 14px; }
 }
