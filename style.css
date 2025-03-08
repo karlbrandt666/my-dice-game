@@ -1,3 +1,9 @@
+:root {
+    --win-color: #4CAF50;
+    --lose-color: #ff4444;
+    --draw-color: #ffc107;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
@@ -20,25 +26,46 @@ body {
     height: 100%;
     background: rgba(0,0,0,0.9);
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 1000;
     animation: fadeIn 0.3s;
 }
 
-.modal button {
-    background: #4CAF50;
-    font-size: 1.2em;
-    padding: 15px 30px;
-    border-radius: 25px;
-    transition: transform 0.2s;
+.modal-content {
+    background: #333;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 500px;
+    position: relative;
+}
+
+.rules-content {
+    text-align: left;
+    padding: 20px;
+}
+
+.rules-content li {
+    margin: 10px 0;
 }
 
 /* Игровой интерфейс */
 #game {
     max-width: 800px;
     margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.rules-btn {
+    background: #2196F3;
+    padding: 8px 15px;
 }
 
 #scores {
@@ -51,17 +78,36 @@ body {
     margin: 20px 0;
 }
 
+.dice-section {
+    position: relative;
+    margin: 30px 0;
+}
+
+.vs-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #333;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    z-index: 1;
+}
+
 .dice-container {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 10px;
     margin: 20px 0;
     min-height: 80px;
+    position: relative;
 }
 
 .ai-dice .dice {
     cursor: default;
-    opacity: 0.8;
+    opacity: 0.9;
+    border: 2px solid #ff4444;
 }
 
 .dice {
@@ -72,10 +118,11 @@ body {
     cursor: pointer;
     transition: all 0.2s;
     animation: diceRoll 0.4s ease-out;
+    border: 2px solid #4CAF50;
 }
 
 .dice.selected {
-    box-shadow: 0 0 15px 3px #4CAF50;
+    box-shadow: 0 0 15px 3px var(--win-color);
     transform: scale(1.1);
 }
 
@@ -98,9 +145,14 @@ button {
     transition: all 0.2s;
 }
 
+button:hover {
+    transform: scale(1.05);
+}
+
 button:disabled {
     background: #666;
     cursor: not-allowed;
+    transform: none;
 }
 
 /* Анимации */
@@ -115,8 +167,32 @@ button:disabled {
     to { opacity: 1; }
 }
 
+@keyframes confetti {
+    0% { transform: translateY(-100%) rotate(0deg); }
+    100% { transform: translateY(100vh) rotate(360deg); }
+}
+
+.result-content.win { border: 3px solid var(--win-color); }
+.result-content.lose { border: 3px solid var(--lose-color); }
+.result-content.draw { border: 3px solid var(--draw-color); }
+
+#result-animation {
+    position: relative;
+    height: 100px;
+    margin: 20px 0;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: currentColor;
+    animation: confetti 2s linear infinite;
+}
+
 @media (max-width: 600px) {
     .dice { width: 45px; height: 45px; }
     #scores { grid-template-columns: 1fr; }
     .controls { flex-direction: column; }
+    .vs-label { font-size: 0.8em; }
 }
