@@ -1,79 +1,146 @@
-let score = 0; // Текущие очки
-let selectedDice = []; // Выбранные кости
-let diceValues = []; // Значения текущих костей
+let currentPlayer = 'player';
+let round = 1;
+let playerScore = 0;
+let aiScore = 0;
+let selected = [];
+let dice = [];
+let rollsLeft = 3;
 
-// Функция броска костей
+// Комбинации из Kingdom Come <button class="citation-flag" data-index="2">
+const combinations = [
+    { name: 'Стрит', check: d => d.sort().join('') === '123456', value: 1500 },
+    { name: 'Фулл-хаус', check: d => {
+        const counts = {};
+        d.forEach(v => counts[v] = (counts[v] || 0) + 1);
+        return Object.values(counts).includes(3) && Object.values(counts).includes(2);
+    }, value: 800 },
+    { name: 'Три одинаковых', check: d => {
+        const counts = {};
+        d.forEach(v => counts[v] = (counts[v] || 0) + 1);
+        return Object.values(counts).some(v => v >= 3);
+    }, value: (d) => {
+        const counts = {};
+        d.forEach(v => counts[v] = (counts[v] || 0) + 1);
+        const triple = Object.keys(counts).find(k => counts[k] >= 3);
+        return triple * 100;
+    }},
+    { name: 'Одиночные', check: d => d.some(v => [1,5].includes(v)), value: (d) => {
+        return d.reduce((sum, v) => sum + (v === 1 ? 100 : v === 5 ? 50 : 0), 0);
+    }}
+];
+
+// Закрыть приветственное окно <button class="citation-flag" data-index="4">
+function closeModal() {
+    document.getElementById('welcome-modal').classList.add('hidden');
+    document.getElementById('game').classList.remove('hidden');
+}
+
+// Переключить правила
+function toggleRules() {
+    const rules = document.getElementById('rules');
+    rules.classList.toggle('hidden');
+}
+
+// Бросок костей
 function rollDice() {
+    if (rollsLeft <= 0) return;
+    
     const container = document.getElementById('dice-container');
-    if (!container) {
-        console.error('Контейнер для костей не найден!');
-        return;
-    }
-
-    container.innerHTML = ''; // Очистка предыдущих костей
-    selectedDice = []; // Сброс выбранных костей
-    diceValues = []; // Сброс значений костей
-
+    container.innerHTML = '';
+    selected = [];
+    
     for (let i = 0; i < 6; i++) {
-        const die = document.createElement('div');
-        die.className = 'dice';
-        const value = Math.floor(Math.random() * 6) + 1; // Случайное значение кости
-        die.style.backgroundImage = `url('dice-${value}.png')`; // Установка изображения
-        die.dataset.value = value; // Сохраняем значение в data-атрибуте
-        die.addEventListener('click', () => toggleDieSelection(die)); // Добавляем обработчик клика
-        container.appendChild(die);
-        diceValues.push(value);
-    }
-
-    // Активируем кнопку "Завершить ход"
-    document.getElementById('end-turn-btn').disabled = false;
-}
-
-// Функция выбора/отмены выбора кости
-function toggleDieSelection(die) {
-    const value = parseInt(die.dataset.value);
-    const index = selectedDice.indexOf(value);
-
-    if (index === -1) {
-        // Проверяем, что можно выбрать только 1 или 5
-        if (value === 1 || value === 5) {
-            selectedDice.push(value);
-            die.classList.add('selected');
-        } else {
-            alert('Можно выбирать только кости со значением 1 или 5!');
+        if (!selected[i]) {
+            dice[i] = Math.floor(Math.random() * 6) + 1;
         }
-    } else {
-        selectedDice.splice(index, 1);
-        die.classList.remove('selected');
     }
+    
+    renderDice();
+    rollsLeft--;
+    updateStatus();
+}
 
-    // Если выбраны все допустимые кости, блокируем кнопку "Бросить"
-    if (selectedDice.length === diceValues.filter(v => v === 1 || v === 5).length) {
-        document.querySelector('button[onclick="rollDice()"]').disabled = true;
-    } else {
-        document.querySelector('button[onclick="rollDice()"]').disabled = false;
+// Отображение костей
+function renderDice() {
+    const container = document.getElementById('dice-container');
+    dice.forEach((value, index) => {
+        const die = document.createElement('div');
+        die.className = `dice ${selected[index] ? 'selected' : ''}`;
+        die.style.backgroundImage = `url('dice-${value}.png')`;
+        die.onclick = () => selectDie(index);
+        container.appendChild(die);
+    });
+}
+
+// Выбор кости
+function selectDie(index) {
+    if (selected[index]) return;
+    selected[index] = true;
+    updateStatus();
+}
+
+// Подсчёт очков
+function calculateScore(dice) {
+    for (const combo of combinations) {
+        if (combo.check(dice)) {
+            return typeof combo.value === 'function' 
+                ? combo.value(dice) 
+                : combo.value;
+        }
+    }
+    return 0; // Если нет комбинаций
+}
+
+// Завершение хода
+function endTurn() {
+    if (currentPlayer === 'player') {
+        const score = calculateScore(dice);
+        playerScore += score;
+        updateScores();
+        alert(`Вы завершили ход с ${score} очками!`);
+        switchToAI();
     }
 }
 
-// Функция завершения хода
-function endTurn() {
-    let turnScore = 0;
+// Ход ИИ <button class="citation-flag" data-index="3">
+function switchToAI() {
+    currentPlayer = 'ai';
+    setTimeout(() => {
+        // Логика ИИ: выбирает случайные комбинации
+        const aiDice = Array.from({length: 6}, () => Math.floor(Math.random() * 6) + 1);
+        const aiScore = calculateScore(aiDice);
+        alert(`ИИ набрал ${aiScore} очков!`);
+        aiScore += aiScore;
+        updateScores();
+        nextRound();
+    }, 1000);
+}
 
-    // Подсчёт очков за выбранные кости
-    selectedDice.forEach(value => {
-        if (value === 1) turnScore += 100;
-        if (value === 5) turnScore += 50;
-    });
+// Следующий раунд
+function nextRound() {
+    round++;
+    if (round > 3) {
+        endGame();
+    } else {
+        resetRound();
+        alert(`Начинается раунд ${round}!`);
+    }
+}
 
-    // Обновляем общий счёт
-    score += turnScore;
-    document.getElementById('score').textContent = `Очки: ${score}`;
+// Обновление очков
+function updateScores() {
+    document.getElementById('player-score').textContent = playerScore;
+    document.getElementById('ai-score').textContent = aiScore;
+}
 
-    // Сбрасываем состояние
-    selectedDice = [];
-    document.getElementById('dice-container').innerHTML = '';
-    document.getElementById('end-turn-btn').disabled = true;
-    document.querySelector('button[onclick="rollDice()"]').disabled = false;
-
-    alert(`Ход завершён! Вы набрали ${turnScore} очков.`);
+// Окончание игры
+function endGame() {
+    if (playerScore > aiScore) {
+        alert('Вы победили!');
+    } else if (playerScore < aiScore) {
+        alert('ИИ победил!');
+    } else {
+        alert('Ничья!');
+    }
+    resetGame();
 }
