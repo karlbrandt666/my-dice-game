@@ -8,30 +8,26 @@
 </head>
 <body>
     <!-- Приветственное окно -->
-    <div id="welcome-modal">
+    <div id="welcome-modal" class="modal">
         <h2>Добро пожаловать в игру!</h2>
         <p>Цель: Набрать больше очков, чем ИИ за 3 раунда.</p>
-        <button onclick="startGame()">Начать игру</button> <!-- Изменили onclick -->
+        <button onclick="startGame()">Начать игру</button>
     </div>
 
-    <!-- Игровой интерфейс (изначально скрыт) -->
+    <!-- Игровой интерфейс -->
     <div id="game" class="hidden">
         <h1>Кости: Королевская битва</h1>
+        <button onclick="toggleRules()">Правила</button>
         
-        <!-- Кнопка правил -->
-        <button onclick="toggleRules()" class="rules-btn">Правила</button>
-        
-        <!-- Секция с правилами (изначально скрыта) -->
+        <!-- Секция правил -->
         <div id="rules" class="hidden">
             <h3>Комбинации:</h3>
             <ul>
                 <li>1 → 100 очков</li>
                 <li>5 → 50 очков</li>
-                <li>Три одинаковых → 100 × значение (например, три 2 → 200)</li>
+                <li>Три одинаковых → 100 × значение</li>
                 <li>Фулл-хаус (3+2) → 800 очков</li>
                 <li>Стрит (1-6) → 1500 очков</li>
-                <li>Четыре одинаковых → 1000 очков</li>
-                <li>Пять одинаковых → 2000 очков</li>
             </ul>
         </div>
 
@@ -43,11 +39,11 @@
             <div>Очки ИИ: <span id="ai-score">0</span></div>
         </div>
 
-        <!-- Контейнеры для костей -->
+        <!-- Кости -->
         <div id="player-dice"></div>
         <div id="ai-dice" class="hidden"></div>
         
-        <!-- Кнопки управления -->
+        <!-- Кнопки -->
         <button onclick="rollDice()" id="roll-btn">Бросить кости</button>
         <button onclick="endTurn()" disabled id="end-btn">Завершить ход</button>
         <div id="status"></div>
