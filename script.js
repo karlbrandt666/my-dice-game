@@ -224,4 +224,18 @@ const Game = (() => {
             setTimeout(() => status.textContent = '', 2000);
         },
 
-        toggleRules()
+        toggleRules() {
+            const rulesModal = document.getElementById('rules-modal');
+            const welcomeModal = document.getElementById('welcome-modal');
+            
+            if (welcomeModal.classList.contains('hidden')) {
+                rulesModal.classList.toggle('hidden');
+            } else {
+                welcomeModal.classList.add('hidden');
+                rulesModal.classList.remove('hidden');
+            }
+        }
+    };
+})();
+
+document.addEventListener('DOMContentLoaded', Game.init);
