@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let aiScore = 0;
     let rollsLeft = 3;
     let selected = [];
-    let playerDice = [];
-    let aiDice = [];
+    let playerDice = Array(6).fill(0);
+    let aiDice = Array(6).fill(0);
 
     // Комбинации
     const combinations = [
@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'Три одинаковых', check: d => hasCount(d,3), value: d => getMostFrequent(d)*100 },
         { name: 'Одиночные', check: d => d.some(v => [1,5].includes(v)), value: d => d.reduce((sum, v) => sum + (v === 1 ? 100 : v === 5 ? 50 : 0), 0) }
     ];
+
+    // Функция для переключения правил
+    window.toggleRules = function() {
+        const rules = document.getElementById('rules');
+        rules.classList.toggle('hidden');
+    };
 
     // Начало игры
     window.startGame = function() {
@@ -30,10 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetRound() {
         rollsLeft = 3;
         selected = Array(6).fill(false);
-        playerDice = Array(6).fill(0);
-        aiDice = Array(6).fill(0);
+        playerDice.fill(0);
+        aiDice.fill(0);
         updateStatus();
         renderDice('player');
+        document.getElementById('ai-dice').classList.add('hidden'); // Скрываем кости ИИ
     }
 
     // Бросок костей
@@ -71,6 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             container.appendChild(die);
         });
+        
+        // Показываем контейнер ИИ после его хода
+        if (target === 'ai') {
+            container.classList.remove('hidden');
+        }
     }
 
     // Выбор кости
@@ -92,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             aiDice = Array.from({length:6}, () => Math.floor(Math.random()*6)+1);
             const aiCombo = getBestCombination(aiDice);
             aiScore += aiCombo.value;
-            renderDice('ai');
+            renderDice('ai'); // Показываем кости ИИ
             updateScores();
             
             if (round < 3) {
@@ -149,5 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
         aiScore = 0;
         document.getElementById('game').classList.add('hidden');
         document.getElementById('welcome-modal').classList.remove('hidden');
+        document.getElementById('ai-dice').classList.add('hidden');
     }
 });
