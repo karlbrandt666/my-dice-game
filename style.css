@@ -1,17 +1,17 @@
 body {
-    font-family: Arial, sans-serif;
-    background-image: url('background.png');
-    background-size: cover;
-    color: white;
-    text-align: center;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    color: #fff;
     margin: 0;
     padding: 20px;
+    min-height: 100vh;
 }
 
-.hidden {
-    display: none !important;
+.hidden { 
+    display: none !important; 
 }
 
+/* Модальные окна */
 .modal {
     position: fixed;
     top: 0;
@@ -23,33 +23,94 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s;
+}
+
+.modal button {
+    background: #4CAF50;
+    font-size: 1.2em;
+    padding: 15px 30px;
+    border-radius: 25px;
+    transition: transform 0.2s;
+}
+
+/* Игровой интерфейс */
+#game {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#scores {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px 0;
+}
+
+.dice-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin: 20px 0;
 }
 
 .dice {
     width: 60px;
     height: 60px;
     background-size: cover;
-    display: inline-block;
-    margin: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    border: 1px solid #fff;
+    transition: transform 0.2s;
+    animation: diceRoll 0.4s ease-out;
+}
+
+.dice.selected {
+    box-shadow: 0 0 15px 3px #4CAF50;
+    transform: scale(1.1);
+}
+
+/* Кнопки */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 button {
-    background: #444;
+    background: #4CAF50;
     border: none;
     color: white;
-    padding: 10px 20px;
-    margin: 10px;
+    padding: 12px 25px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
 }
 
 button:disabled {
-    opacity: 0.5;
+    background: #666;
+    cursor: not-allowed;
 }
 
-/* Адаптация для мобильных */
+/* Анимации */
+@keyframes diceRoll {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 @media (max-width: 600px) {
-    .dice { width: 50px; height: 50px; }
-    button { font-size: 14px; }
+    .dice { width: 45px; height: 45px; }
+    #scores { grid-template-columns: 1fr; }
+    .controls { flex-direction: column; }
 }
