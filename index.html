@@ -1,53 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кости: Королевская битва</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:;base64,iVBORw0KGgo="> <!-- Фиктивная favicon для 404 <button class="citation-flag" data-index="8"> -->
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 <body>
     <!-- Приветственное окно -->
     <div id="welcome-modal" class="modal">
-        <h2>Добро пожаловать в игру!</h2>
-        <p>Цель: Набрать больше очков, чем ИИ за 3 раунда.</p>
-        <button onclick="startGame()">Начать игру</button>
+        <h2>🎲 Кости: Королевская битва 🎲</h2>
+        <p>Цель: Набрать больше очков, чем ИИ за 3 раунда!</p>
+        <button onclick="Game.start()">Начать игру</button>
     </div>
 
     <!-- Игровой интерфейс -->
     <div id="game" class="hidden">
-        <h1>Кости: Королевская битва</h1>
-        <button onclick="toggleRules()">Правила</button>
+        <h1>🎲 Кости: Королевская битва 🎲</h1>
         
-        <!-- Секция правил -->
-        <div id="rules" class="hidden">
-            <h3>Комбинации:</h3>
-            <ul>
-                <li>1 → 100 очков</li>
-                <li>5 → 50 очков</li>
-                <li>Три одинаковых → 100 × значение</li>
-                <li>Фулл-хаус (3+2) → 800 очков</li>
-                <li>Стрит (1-6) → 1500 очков</li>
-            </ul>
-        </div>
-
-        <!-- Статистика -->
         <div id="scores">
             <div>Раунд: <span id="round">1</span>/3</div>
-            <div>Осталось бросков: <span id="rolls-left">3</span></div>
+            <div>Бросков осталось: <span id="rolls-left">3</span></div>
             <div>Ваши очки: <span id="player-score">0</span></div>
             <div>Очки ИИ: <span id="ai-score">0</span></div>
         </div>
 
-        <!-- Кости -->
-        <div id="player-dice"></div>
-        <div id="ai-dice" class="hidden"></div>
-        
-        <!-- Кнопки -->
-        <button onclick="rollDice()" id="roll-btn">Бросить кости</button>
-        <button onclick="endTurn()" disabled id="end-btn">Завершить ход</button>
-        <div id="status"></div>
+        <div class="dice-container" id="player-dice"></div>
+        <div class="controls">
+            <button id="roll-btn" onclick="Game.rollDice()">🎲 Бросить кости</button>
+            <button id="end-btn" onclick="Game.endTurn()" disabled>⏹ Завершить ход</button>
+        </div>
+        <div id="status" class="status"></div>
+    </div>
+
+    <!-- Результаты игры -->
+    <div id="result-modal" class="modal hidden">
+        <h2 id="result-text"></h2>
+        <button onclick="Game.reset()">🔄 Играть снова</button>
     </div>
 
     <script src="script.js"></script>
