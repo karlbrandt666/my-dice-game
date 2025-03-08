@@ -2,16 +2,47 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Адаптация для мобильных устройств <button class="citation-flag" data-index="7"> -->
-    <title>Игра в кости</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кости: Королевская битва</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Игра в кости</h1>
-    <p id="score">Очки: 0</p>
-    <div id="dice-container"></div>
-    <button onclick="rollDice()">Бросить кости</button>
-    <button onclick="endTurn()" disabled id="end-turn-btn">Завершить ход</button>
+    <!-- Приветственное окно <button class="citation-flag" data-index="4"> -->
+    <div id="welcome-modal">
+        <h2>Добро пожаловать в игру!</h2>
+        <p>Цель: Набрать больше очков, чем ИИ за 3 раунда.</p>
+        <button onclick="closeModal()">Начать игру</button>
+    </div>
+
+    <div id="game">
+        <h1>Кости: Королевская битва</h1>
+        <button onclick="toggleRules()">Правила</button>
+        
+        <!-- Секция с правилами -->
+        <div id="rules" class="hidden">
+            <h3>Комбинации:</h3>
+            <ul>
+                <li>1 → 100 очков</li>
+                <li>5 → 50 очков</li>
+                <li>Три одинаковых → 100 × значение (например, три 2 → 200)</li>
+                <li>Стрит (1-6) → 1500 очков</li>
+                <li>Фулл-хаус (3+2) → 800 очков</li>
+            </ul>
+        </div>
+
+        <!-- Очки игроков -->
+        <div id="scores">
+            <div>Вы: <span id="player-score">0</span></div>
+            <div>ИИ: <span id="ai-score">0</span></div>
+            <div>Раунд: <span id="round">1</span>/3</div>
+        </div>
+
+        <div id="dice-container"></div>
+        <button onclick="rollDice()" id="roll-btn">Бросить кости</button>
+        <button onclick="endTurn()" disabled id="end-btn">Завершить ход</button>
+        <div id="status"></div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
