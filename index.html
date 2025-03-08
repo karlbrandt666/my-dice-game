@@ -1,55 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кости: Королевская битва</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:;base64,iVBORw0KGgo="> <!-- Фиктивная favicon для 404 <button class="citation-flag" data-index="8"> -->
-</head>
-<body>
-    <!-- Приветственное окно -->
-    <div id="welcome-modal" class="modal">
-        <h2>Добро пожаловать в игру!</h2>
-        <p>Цель: Набрать больше очков, чем ИИ за 3 раунда.</p>
-        <button onclick="startGame()">Начать игру</button>
-    </div>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
 
-    <!-- Игровой интерфейс -->
-    <div id="game" class="hidden">
-        <h1>Кости: Королевская битва</h1>
-        <button onclick="toggleRules()">Правила</button>
+        .hidden { display: none !important; }
+
+        /* Модальные окна */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
         
-        <!-- Секция правил -->
-        <div id="rules" class="hidden">
-            <h3>Комбинации:</h3>
-            <ul>
-                <li>1 → 100 очков</li>
-                <li>5 → 50 очков</li>
-                <li>Три одинаковых → 100 × значение</li>
-                <li>Фулл-хаус (3+2) → 800 очков</li>
-                <li>Стрит (1-6) → 1500 очков</li>
-            </ul>
-        </div>
+        .modal button {
+            background: #4CAF50;
+            font-size: 1.2em;
+            padding: 15px 30px;
+            border-radius: 25px;
+            transition: transform 0.2s;
+        }
 
-        <!-- Статистика -->
-        <div id="scores">
-            <div>Раунд: <span id="round">1</span>/3</div>
-            <div>Осталось бросков: <span id="rolls-left">3</span></div>
-            <div>Ваши очки: <span id="player-score">0</span></div>
-            <div>Очки ИИ: <span id="ai-score">0</span></div>
-        </div>
+        /* Игровой интерфейс */
+        #game {
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-        <!-- Кости -->
-        <div id="player-dice"></div>
-        <div id="ai-dice" class="hidden"></div>
+        #scores {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .dice-container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .dice {
+            width: 60px;
+            height: 60px;
+            background-size: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            animation: diceRoll 0.4s ease-out;
+        }
         
-        <!-- Кнопки -->
-        <button onclick="rollDice()" id="roll-btn">Бросить кости</button>
-        <button onclick="endTurn()" disabled id="end-btn">Завершить ход</button>
-        <div id="status"></div>
-    </div>
+        .dice.selected {
+            box-shadow: 0 0 15px 3px #4CAF50;
+            transform: scale(1.1);
+        }
 
-    <script src="script.js"></script>
-</body>
-</html>
+        /* Кнопки */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            background: #4CAF50;
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        /* Анимации */
+        @keyframes diceRoll {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .dice { width: 45px; height: 45px; }
+            #scores { grid-template-columns: 1fr; }
+            .controls { flex-direction: column; }
+        }
