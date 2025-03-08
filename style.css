@@ -196,3 +196,20 @@ button:disabled {
     .controls { flex-direction: column; }
     .vs-label { font-size: 0.8em; }
 }
+
+.modal-content button {
+    margin-top: 15px;
+}
+
+.rules-content button {
+    background: #2196F3;
+}
+
+/* Исправление z-index */
+#rules-modal {
+    z-index: 1001;
+}
+
+#welcome-modal {
+    z-index: 1002;
+}
