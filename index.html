@@ -17,14 +17,14 @@
             <button onclick="Game.toggleRules()">📖 Правила игры</button>
         </div>
     </div>
-
+    
     <!-- Игровой интерфейс -->
     <div id="game" class="hidden">
         <div class="header">
             <h1>🎲 Кости: Королевская битва 🎲</h1>
             <button class="rules-btn" onclick="Game.toggleRules()">📖 Правила</button>
         </div>
-
+        
         <!-- Окно правил -->
         <div id="rules-modal" class="modal hidden">
             <div class="modal-content rules-content">
@@ -44,27 +44,28 @@
                 <button onclick="Game.toggleRules()">Закрыть</button>
             </div>
         </div>
-
+        
         <div id="scores">
             <div>Раунд: <span id="round">1</span>/3</div>
             <div>Бросков осталось: <span id="rolls-left">3</span></div>
             <div>Ваши очки: <span id="player-score">0</span></div>
             <div>Очки ИИ: <span id="ai-score">0</span></div>
         </div>
-
+        
         <div class="dice-section">
             <div class="dice-container" id="player-dice"></div>
             <div class="vs-label">VS</div>
             <div class="dice-container ai-dice" id="ai-dice"></div>
         </div>
-
+        
         <div class="controls">
             <button id="roll-btn" onclick="Game.rollDice()">🎲 Бросить кости</button>
             <button id="end-btn" onclick="Game.endTurn()" disabled>⏹ Завершить ход</button>
         </div>
+        
         <div id="status" class="status"></div>
     </div>
-
+    
     <!-- Результаты игры -->
     <div id="result-modal" class="modal hidden">
         <div class="modal-content result-content">
@@ -73,7 +74,7 @@
             <button onclick="Game.reset()">🔄 Играть снова</button>
         </div>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>
