@@ -69,8 +69,10 @@ const Game = (() => {
 
     // Инициализация игры
     function init() {
-        document.querySelectorAll('.dice').forEach(die => {
-            die.addEventListener('click', e => toggleDie(e.target.dataset.index));
+        document.getElementById('player-dice').addEventListener('click', e => {
+            if (e.target.classList.contains('dice')) {
+                Game.toggleDie(e.target.dataset.index);
+            }
         });
     }
 
@@ -86,6 +88,7 @@ const Game = (() => {
             state.rollsLeft = 3;
             state.players.human.selected = [];
             this.generateDice('human');
+            this.generateDice('ai');
             this.updateUI();
         },
 
@@ -110,12 +113,16 @@ const Game = (() => {
         },
 
         endTurn() {
-            if (!state.players.human.selected.length) {
-                this.showStatus('Выберите хотя бы одну кость!', 'red');
+            if (state.players.human.selected.length === 0) {
+                this.showStatus('Выберите хотя бы одну кость!', '#ff4444');
                 return;
             }
 
-            const humanScore = this.calculateScore('human');
+            // Подсчёт очков игрока
+            const selectedDice = state.players.human.dice.filter((_, i) => 
+                state.players.human.selected.includes(i)
+            );
+            const humanScore = this.calculateScore(selectedDice);
             state.players.human.score += humanScore;
             
             this.showStatus(`Ваши очки: +${humanScore}`, '#4CAF50');
@@ -127,19 +134,20 @@ const Game = (() => {
             let rolls = 3;
             
             const aiRoll = setInterval(() => {
-                this.generateDice('ai');
-                this.updateUI('ai');
+                state.players.ai.dice = state.players.ai.dice.map(() => 
+                    Math.floor(Math.random() * 6) + 1
+                );
+                this.updateAI();
                 if (--rolls <= 0) {
                     clearInterval(aiRoll);
-                    const aiScore = this.calculateScore('ai');
+                    const aiScore = this.calculateScore(state.players.ai.dice);
                     state.players.ai.score += aiScore;
                     this.nextRound();
                 }
             }, 300);
         },
 
-        calculateScore(player) {
-            const dice = state.players[player].dice;
+        calculateScore(dice) {
             for (const combo of combinations) {
                 if (combo.check(dice)) {
                     return typeof combo.value === 'function' 
@@ -161,17 +169,30 @@ const Game = (() => {
             this.updateUI();
         },
 
-        updateUI(player = 'human') {
+        updateUI() {
+            // Обновление игрока
             document.getElementById('round').textContent = state.round;
             document.getElementById('rolls-left').textContent = state.rollsLeft;
             document.getElementById('player-score').textContent = state.players.human.score;
             document.getElementById('ai-score').textContent = state.players.ai.score;
             
-            const container = document.getElementById('player-dice');
-            container.innerHTML = state.players.human.dice
+            // Отрисовка костей игрока
+            const playerContainer = document.getElementById('player-dice');
+            playerContainer.innerHTML = state.players.human.dice
                 .map((val, i) => `
                     <div class="dice ${state.players.human.selected.includes(i) ? 'selected' : ''}" 
                          data-index="${i}"
+                         style="background-image: url('dice-${val}.png')">
+                    </div>
+                `).join('');
+        },
+
+        updateAI() {
+            // Отрисовка костей ИИ
+            const aiContainer = document.getElementById('ai-dice');
+            aiContainer.innerHTML = state.players.ai.dice
+                .map((val, i) => `
+                    <div class="dice" 
                          style="background-image: url('dice-${val}.png')">
                     </div>
                 `).join('');
