@@ -5,21 +5,59 @@ document.addEventListener('DOMContentLoaded', () => {
     let playerScore = 0;
     let aiScore = 0;
     let rollsLeft = 3;
-    let selected = [];
+    let selected = Array(6).fill(false);
     let playerDice = Array(6).fill(0);
     let aiDice = Array(6).fill(0);
 
     // Комбинации
     const combinations = [
-        { name: 'Пять одинаковых', check: d => hasCount(d,5), value: 2000 },
-        { name: 'Четыре одинаковых', check: d => hasCount(d,4), value: 1000 },
-        { name: 'Фулл-хаус', check: d => hasCount(d,3) && hasCount(d,2), value: 800 },
-        { name: 'Стрит', check: d => d.sort().join('') === '123456', value: 1500 },
-        { name: 'Три одинаковых', check: d => hasCount(d,3), value: d => getMostFrequent(d)*100 },
-        { name: 'Одиночные', check: d => d.some(v => [1,5].includes(v)), value: d => d.reduce((sum, v) => sum + (v === 1 ? 100 : v === 5 ? 50 : 0), 0) }
+        { 
+            name: 'Пять одинаковых', 
+            check: d => hasCount(d,5), 
+            value: 2000 
+        },
+        { 
+            name: 'Четыре одинаковых', 
+            check: d => hasCount(d,4), 
+            value: 1000 
+        },
+        { 
+            name: 'Фулл-хаус', 
+            check: d => hasCount(d,3) && hasCount(d,2), 
+            value: 800 
+        },
+        { 
+            name: 'Стрит', 
+            check: d => d.sort().join('') === '123456', 
+            value: 1500 
+        },
+        { 
+            name: 'Три одинаковых', 
+            check: d => hasCount(d,3), 
+            value: d => getMostFrequent(d)*100 
+        },
+        { 
+            name: 'Одиночные', 
+            check: d => d.some(v => [1,5].includes(v)), 
+            value: d => d.reduce((sum, v) => sum + (v === 1 ? 100 : v === 5 ? 50 : 0), 0) 
+        }
     ];
 
-    // Функция для переключения правил
+    // Функция проверки количества одинаковых костей <button class="citation-flag" data-index="1">
+    function hasCount(dice, count) {
+        const freq = {};
+        dice.forEach(v => freq[v] = (freq[v] || 0) + 1);
+        return Object.values(freq).some(v => v >= count);
+    }
+
+    // Функция получения наиболее частого значения
+    function getMostFrequent(dice) {
+        const freq = {};
+        dice.forEach(v => freq[v] = (freq[v] || 0) + 1);
+        return parseInt(Object.keys(freq).reduce((a, b) => freq[a] > freq[b] ? a : b));
+    }
+
+    // Переключение правил
     window.toggleRules = function() {
         const rules = document.getElementById('rules');
         rules.classList.toggle('hidden');
@@ -35,12 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Сброс раунда
     function resetRound() {
         rollsLeft = 3;
-        selected = Array(6).fill(false);
+        selected.fill(false);
         playerDice.fill(0);
         aiDice.fill(0);
         updateStatus();
         renderDice('player');
-        document.getElementById('ai-dice').classList.add('hidden'); // Скрываем кости ИИ
+        document.getElementById('ai-dice').classList.add('hidden');
     }
 
     // Бросок костей
@@ -104,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             aiDice = Array.from({length:6}, () => Math.floor(Math.random()*6)+1);
             const aiCombo = getBestCombination(aiDice);
             aiScore += aiCombo.value;
-            renderDice('ai'); // Показываем кости ИИ
+            renderDice('ai');
             updateScores();
             
             if (round < 3) {
