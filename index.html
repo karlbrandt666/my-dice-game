@@ -7,17 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Приветственное окно <button class="citation-flag" data-index="4"> -->
+    <!-- Приветственное окно -->
     <div id="welcome-modal">
         <h2>Добро пожаловать в игру!</h2>
         <p>Цель: Набрать больше очков, чем ИИ за 3 раунда.</p>
-        <button onclick="closeModal()">Начать игру</button>
+        <button onclick="startGame()">Начать игру</button> <!-- Изменили onclick -->
     </div>
 
+    <!-- Игровой интерфейс (изначально скрыт) -->
     <div id="game" class="hidden">
         <h1>Кости: Королевская битва</h1>
         
-        <!-- Кнопка для отображения правил -->
+        <!-- Кнопка правил -->
         <button onclick="toggleRules()" class="rules-btn">Правила</button>
         
         <!-- Секция с правилами (изначально скрыта) -->
@@ -34,7 +35,7 @@
             </ul>
         </div>
 
-        <!-- Информация о раундах и очках -->
+        <!-- Статистика -->
         <div id="scores">
             <div>Раунд: <span id="round">1</span>/3</div>
             <div>Осталось бросков: <span id="rolls-left">3</span></div>
@@ -42,7 +43,7 @@
             <div>Очки ИИ: <span id="ai-score">0</span></div>
         </div>
 
-        <!-- Контейнеры для костей игрока и ИИ -->
+        <!-- Контейнеры для костей -->
         <div id="player-dice"></div>
         <div id="ai-dice" class="hidden"></div>
         
