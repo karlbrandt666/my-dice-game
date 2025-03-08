@@ -14,9 +14,9 @@ const Game = (() => {
             acc[val] = (acc[val] || 0) + 1;
             return acc;
         }, {}),
-        
+
         sortNumbers: (a, b) => a - b,
-        
+
         createConfetti: (color, count) => {
             const container = document.getElementById('result-animation');
             for (let i = 0; i < count; i++) {
@@ -76,7 +76,7 @@ const Game = (() => {
 
         rollDice() {
             if (state.rollsLeft <= 0 || state.isAIThinking) return;
-
+            
             state.players.human.dice = state.players.human.dice.map((val, i) =>
                 state.players.human.selected.includes(i) ? val : Math.floor(Math.random() * 6) + 1
             );
@@ -94,13 +94,13 @@ const Game = (() => {
                 this.showStatus('Выберите хотя бы одну кость!', '#ff4444');
                 return;
             }
-
+            
             const selectedDice = state.players.human.dice.filter((_, i) => 
                 state.players.human.selected.includes(i)
             );
+            
             const humanScore = this.calculateScore(selectedDice);
             state.players.human.score += humanScore;
-            
             this.showStatus(`Ваши очки: +${humanScore}`, '#4CAF50');
             this.aiTurn();
         },
@@ -113,7 +113,9 @@ const Game = (() => {
                 state.players.ai.dice = state.players.ai.dice.map((val, i) => 
                     state.players.ai.selected.includes(i) ? val : Math.floor(Math.random() * 6) + 1
                 );
+                
                 this.updateAI();
+                
                 if (--rolls <= 0) {
                     clearInterval(aiRoll);
                     const aiSelected = state.players.ai.dice.filter((_, i) =>
@@ -188,10 +190,10 @@ const Game = (() => {
             const resultText = document.getElementById('result-text');
             const humanScore = state.players.human.score;
             const aiScore = state.players.ai.score;
-
+            
             resultContent.classList.remove('win', 'lose', 'draw');
             document.getElementById('result-animation').innerHTML = '';
-
+            
             if (humanScore > aiScore) {
                 resultText.textContent = `🏆 Победа! ${humanScore} : ${aiScore}`;
                 resultContent.classList.add('win');
@@ -205,7 +207,7 @@ const Game = (() => {
                 resultContent.classList.add('draw');
                 utils.createConfetti('#ffc107', 50);
             }
-
+            
             document.getElementById('result-modal').classList.remove('hidden');
         },
 
