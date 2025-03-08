@@ -1,3 +1,4 @@
+// Инициализация переменных
 let currentPlayer = 'player';
 let round = 1;
 let playerScore = 0;
@@ -32,10 +33,7 @@ const combinations = [
     { 
         name: 'Три одинаковых', 
         check: d => hasCount(d, 3), 
-        value: (d) => {
-            const triple = getMostFrequent(d);
-            return triple * 100;
-        }
+        value: (d) => getMostFrequent(d) * 100 
     },
     { 
         name: 'Одиночные', 
@@ -58,16 +56,21 @@ function getMostFrequent(dice) {
     return parseInt(Object.keys(freq).reduce((a, b) => freq[a] > freq[b] ? a : b));
 }
 
-// Закрыть приветственное окно
-function closeModal() {
-    document.getElementById('welcome-modal').classList.add('hidden');
-    document.getElementById('game').classList.remove('hidden');
+// Начало игры (связано с кнопкой "Начать игру")
+function startGame() {
+    document.getElementById('welcome-modal').classList.add('hidden'); // Скрываем приветствие
+    document.getElementById('game').classList.remove('hidden'); // Показываем игру
+    document.getElementById('game').classList.add('active'); // Включаем анимацию
+    resetRound(); // Сбрасываем раунд
 }
 
-// Показать/скрыть правила
-function toggleRules() {
-    const rules = document.getElementById('rules');
-    rules.classList.toggle('hidden');
+// Сброс раунда
+function resetRound() {
+    rollsLeft = 3;
+    selected = Array(6).fill(false);
+    playerDice = [];
+    aiDice = [];
+    updateStatus();
 }
 
 // Бросок костей
@@ -76,7 +79,6 @@ function rollDice() {
 
     const container = document.getElementById('player-dice');
     container.innerHTML = '';
-    selected = [];
 
     for (let i = 0; i < 6; i++) {
         if (!selected[i]) {
@@ -87,13 +89,13 @@ function rollDice() {
     renderDice('player');
     rollsLeft--;
     updateStatus();
-    
+
     if (rollsLeft === 0) {
         endTurn();
     }
 }
 
-// Отображение костей (для игрока или ИИ)
+// Отображение костей
 function renderDice(target) {
     const container = document.getElementById(`${target}-dice`);
     container.innerHTML = '';
@@ -113,7 +115,7 @@ function renderDice(target) {
     });
 }
 
-// Выбор кости игроком
+// Выбор кости
 function selectDie(index) {
     if (rollsLeft === 3) return; // Нельзя выбирать до первого броска
     
@@ -123,9 +125,6 @@ function selectDie(index) {
 
 // Завершение хода
 function endTurn() {
-    document.getElementById('player-dice').classList.add('hidden');
-    document.getElementById('ai-dice').classList.remove('hidden');
-    
     // Подсчёт очков игрока
     const playerCombo = getBestCombination(playerDice);
     playerScore += playerCombo.value;
@@ -162,22 +161,17 @@ function getBestCombination(dice) {
     return { name: 'Ничего', value: 0 };
 }
 
-// Обновление статуса (раунд, броски)
+// Обновление статуса
 function updateStatus() {
     document.getElementById('round').textContent = round;
     document.getElementById('rolls-left').textContent = rollsLeft;
     document.getElementById('status').textContent = `Ваша комбинация: ${getBestCombination(playerDice).name}`;
 }
 
-// Сброс раунда
-function resetRound() {
-    rollsLeft = 3;
-    selected = Array(6).fill(false);
-    playerDice = [];
-    aiDice = [];
-    document.getElementById('player-dice').classList.remove('hidden');
-    document.getElementById('ai-dice').classList.add('hidden');
-    updateStatus();
+// Обновление очков
+function updateScores() {
+    document.getElementById('player-score').textContent = playerScore;
+    document.getElementById('ai-score').textContent = aiScore;
 }
 
 // Окончание игры
@@ -197,4 +191,6 @@ function resetGame() {
     aiScore = 0;
     resetRound();
     updateScores();
+    document.getElementById('game').classList.remove('active'); // Сброс анимации
+    document.getElementById('welcome-modal').classList.remove('hidden'); // Показываем приветствие
 }
