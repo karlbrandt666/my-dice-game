@@ -214,6 +214,11 @@ const Game = (() => {
         resultText.textContent = text;
         resultText.style.color = color;
         resultModal.classList.remove('hidden');
+        
+        // Добавляем анимацию для результата
+        resultModal.classList.remove('modal-fade-in');
+        void resultModal.offsetWidth; // Форсируем перерисовку
+        resultModal.classList.add('modal-fade-in');
     }
 
     function reset() {
@@ -235,25 +240,37 @@ const Game = (() => {
         playerContainer.innerHTML = state.players.human.dice
             .map((val, i) => `
                 <div class="dice ${state.players.human.selected.includes(i) ? 'selected' : ''}" 
-                     data-index="${i}">
-                    <div class="dice-value">${val}</div>
+                     data-index="${i}"
+                     data-value="${val}">
                 </div>
             `).join('');
 
         const aiContainer = document.getElementById('ai-dice');
         aiContainer.innerHTML = state.players.ai.dice
             .map((val, i) => `
-                <div class="dice ${state.players.ai.selected.includes(i) ? 'selected' : ''}">
-                    <div class="dice-value">${val}</div>
+                <div class="dice ${state.players.ai.selected.includes(i) ? 'selected' : ''}"
+                     data-value="${val}">
                 </div>
             `).join('');
+
+        // Добавляем анимацию для банка при изменении
+        const potElement = document.getElementById('current-pot');
+        potElement.classList.remove('pot-pulse');
+        void potElement.offsetWidth; // Форсируем перерисовку
+        potElement.classList.add('pot-pulse');
     }
 
     function showStatus(text, color = '#fff') {
         const status = document.getElementById('status');
         status.textContent = text;
         status.style.color = color;
-        setTimeout(() => status.textContent = '', 2000);
+        status.classList.remove('status-slide-in');
+        void status.offsetWidth; // Форсируем перерисовку
+        status.classList.add('status-slide-in');
+        setTimeout(() => {
+            status.textContent = '';
+            status.classList.remove('status-slide-in');
+        }, 2000);
     }
 
     function toggleRules() {
@@ -279,6 +296,30 @@ const Game = (() => {
         animateDiceRoll: (diceElement) => {
             diceElement.classList.add('rolling');
             setTimeout(() => diceElement.classList.remove('rolling'), 500);
+        },
+
+        animateWin: () => {
+            const dice = document.querySelectorAll('.dice');
+            dice.forEach(die => {
+                die.classList.add('bounce');
+            });
+            setTimeout(() => {
+                dice.forEach(die => {
+                    die.classList.remove('bounce');
+                });
+            }, 1000);
+        },
+
+        animateLose: () => {
+            const dice = document.querySelectorAll('.dice');
+            dice.forEach(die => {
+                die.classList.add('shake');
+            });
+            setTimeout(() => {
+                dice.forEach(die => {
+                    die.classList.remove('shake');
+                });
+            }, 1000);
         }
     };
 

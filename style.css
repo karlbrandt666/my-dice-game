@@ -41,7 +41,7 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    animation: fadeIn 0.3s;
+    animation: modalFadeIn 0.3s ease-out;
 }
 
 .modal-content {
@@ -142,16 +142,28 @@ body {
 }
 
 .dice {
-    width: 60px;
-    height: 60px;
-    background: var(--wood-light);
-    border: 2px solid var(--wood-dark);
+    width: 80px;
+    height: 80px;
+    background: #fff;
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     position: relative;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-size: cover;
+    background-position: center;
 }
+
+.dice[data-value="1"] { background-image: url('images/dice-1.svg'); }
+.dice[data-value="2"] { background-image: url('images/dice-2.svg'); }
+.dice[data-value="3"] { background-image: url('images/dice-3.svg'); }
+.dice[data-value="4"] { background-image: url('images/dice-4.svg'); }
+.dice[data-value="5"] { background-image: url('images/dice-5.svg'); }
+.dice[data-value="6"] { background-image: url('images/dice-6.svg'); }
 
 .dice::before {
     content: '';
@@ -160,18 +172,64 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('dice-texture.png');
-    opacity: 0.1;
-    border-radius: 8px;
+    border-radius: 10px;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
+    transition: all 0.3s ease;
+}
+
+.dice:hover::before {
+    background: linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.4));
 }
 
 .dice.selected {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px var(--gold-color);
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.dice.selected::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 2px solid #ffd700;
+    border-radius: 12px;
+    animation: pulse 2s infinite;
 }
 
 .dice.rolling {
     animation: roll 0.5s ease-in-out;
+}
+
+@keyframes roll {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(90deg); }
+    50% { transform: rotate(180deg); }
+    75% { transform: rotate(270deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+    50% { box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5); }
 }
 
 /* Кнопки */
@@ -191,7 +249,7 @@ button {
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     font-family: 'MedievalSharp', cursive;
     text-shadow: var(--text-shadow);
     position: relative;
@@ -199,7 +257,8 @@ button {
 }
 
 button:hover {
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     background: var(--wood-light);
     color: var(--wood-dark);
 }
@@ -640,4 +699,23 @@ button:active::after {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+}
+
+/* Анимации для модальных окон */
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Анимации для статуса */
+@keyframes statusSlideIn {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Анимации для банка */
+@keyframes potPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
