@@ -1,96 +1,101 @@
-const Game = (() => {
-    const state = {
-        currentValue: 1,
+const Game = {
+    state: {
+        currentValue: null,
         isRolling: false,
         answers: {
-            1: "НЕТ",
-            2: "ВОЗМОЖНО",
-            3: "СКОРЕЕ ВСЕГО",
-            4: "ДА",
-            5: "ОПРЕДЕЛЕННО ДА",
-            6: "ДА, И ЭТО ОЧЕВИДНО"
+            1: "Нет",
+            2: "Скорее нет",
+            3: "Возможно",
+            4: "Скорее да",
+            5: "Да",
+            6: "Да, и это очевидно"
         }
-    };
+    },
 
-    function init() {
-        document.getElementById('roll-button').addEventListener('click', rollDice);
-        document.getElementById('roll-again').addEventListener('click', resetGame);
+    init() {
+        this.dice = document.querySelector('.dice');
+        this.rollButton = document.querySelector('.roll-button');
+        this.resetButton = document.querySelector('.reset-button');
+        this.welcomeScreen = document.querySelector('.welcome-screen');
+        this.resultScreen = document.querySelector('.result-screen');
+        this.answerElement = document.querySelector('.answer');
+
+        this.rollButton.addEventListener('click', () => this.rollDice());
+        this.resetButton.addEventListener('click', () => this.resetGame());
         
         // Добавляем эффект глитча для текста
         const glitchTexts = document.querySelectorAll('.glitch');
         glitchTexts.forEach(text => {
             text.setAttribute('data-text', text.textContent);
         });
-    }
+    },
 
-    function rollDice() {
-        if (state.isRolling) return;
+    rollDice() {
+        if (this.state.isRolling) return;
         
-        state.isRolling = true;
-        const dice = document.querySelector('.dice');
-        const button = document.getElementById('roll-button');
+        this.state.isRolling = true;
+        this.rollButton.disabled = true;
         
-        // Отключаем кнопку во время броска
-        button.disabled = true;
-        
-        // Добавляем анимацию броска
-        dice.classList.add('rolling');
+        // Добавляем класс для анимации
+        this.dice.classList.add('rolling');
         
         // Генерируем случайное значение
-        const newValue = Math.floor(Math.random() * 6) + 1;
+        const randomValue = Math.floor(Math.random() * 6) + 1;
+        this.state.currentValue = randomValue;
         
-        // Обновляем значение после анимации
+        // Обновляем отображение кости
+        this.dice.setAttribute('data-value', randomValue);
+        
+        // Создаем точки для кости
+        this.dice.innerHTML = '';
+        for (let i = 0; i < randomValue; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            this.dice.appendChild(dot);
+        }
+        
+        // Останавливаем анимацию и показываем результат
         setTimeout(() => {
-            dice.setAttribute('data-value', newValue);
-            state.currentValue = newValue;
-            
-            // Показываем результат с эффектом глитча
-            showResult();
-            
-            // Убираем анимацию
-            dice.classList.remove('rolling');
-            button.disabled = false;
-            state.isRolling = false;
-        }, 1000);
-    }
+            this.dice.classList.remove('rolling');
+            this.showResult();
+        }, 1500);
+    },
 
-    function showResult() {
-        const welcomeScreen = document.querySelector('.welcome-screen');
-        const resultScreen = document.querySelector('.result-screen');
-        const answerText = document.getElementById('answer-text');
-        
-        // Показываем ответ с эффектом глитча
-        answerText.textContent = state.answers[state.currentValue];
-        answerText.classList.add('cyber-text');
-        
-        // Анимируем переход
-        welcomeScreen.classList.add('hidden');
-        resultScreen.classList.remove('hidden');
-        
+    showResult() {
         // Добавляем эффект глитча для ответа
-        setTimeout(() => {
-            answerText.classList.remove('cyber-text');
-        }, 2000);
-    }
-
-    function resetGame() {
-        const welcomeScreen = document.querySelector('.welcome-screen');
-        const resultScreen = document.querySelector('.result-screen');
-        const dice = document.querySelector('.dice');
+        const answer = this.state.answers[this.state.currentValue];
+        this.answerElement.textContent = answer;
         
-        // Сбрасываем значение кости
-        dice.setAttribute('data-value', '1');
-        state.currentValue = 1;
+        // Показываем экран результата
+        this.welcomeScreen.style.display = 'none';
+        this.resultScreen.classList.add('active');
+        
+        // Добавляем эффект появления для ответа
+        this.answerElement.style.opacity = '0';
+        setTimeout(() => {
+            this.answerElement.style.opacity = '1';
+        }, 100);
+        
+        this.state.isRolling = false;
+        this.rollButton.disabled = false;
+    },
+
+    resetGame() {
+        this.state.currentValue = null;
+        this.state.isRolling = false;
+        
+        // Сбрасываем отображение
+        this.dice.setAttribute('data-value', '');
+        this.dice.innerHTML = '';
+        this.answerElement.textContent = '';
         
         // Возвращаемся к начальному экрану
-        resultScreen.classList.add('hidden');
-        welcomeScreen.classList.remove('hidden');
+        this.resultScreen.classList.remove('active');
+        this.welcomeScreen.style.display = 'block';
     }
+};
 
-    return {
-        init
-    };
-})();
-
-// Инициализация игры
-Game.init();
+// Инициализация игры при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    Game.init();
+});

@@ -2,50 +2,44 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кость Судьбы 2077</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap">
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="cyberpunk-container">
         <div class="glitch-overlay"></div>
-        <div class="container">
-            <div class="welcome-screen">
-                <h1 class="glitch" data-text="КОСТЬ СУДЬБЫ 2077">КОСТЬ СУДЬБЫ 2077</h1>
-                <p class="subtitle">Задайте вопрос в уме и бросьте кость</p>
-                <div class="dice-container">
-                    <div class="dice" data-value="1">
-                        <div class="dot"></div>
-                    </div>
-                </div>
-                <button id="roll-button" class="cyber-button">
-                    <span class="cyber-button__glitch"></span>
-                    <span class="cyber-button__text">Бросить кость</span>
-                </button>
-            </div>
-
-            <div class="result-screen hidden">
-                <div class="dice-result">
-                    <div class="dice" data-value="1">
-                        <div class="dot"></div>
-                    </div>
-                </div>
-                <div class="answer">
-                    <h2 class="cyber-text">Ответ:</h2>
-                    <p id="answer-text" class="cyber-text"></p>
-                </div>
-                <button id="roll-again" class="cyber-button">
-                    <span class="cyber-button__glitch"></span>
-                    <span class="cyber-button__text">Бросить снова</span>
-                </button>
-            </div>
-        </div>
         <div class="cyber-grid"></div>
+        
+        <div class="welcome-screen">
+            <h1 class="cyber-text">Кость Судьбы 2077</h1>
+            <p class="subtitle">Задайте вопрос и бросьте кость</p>
+            
+            <div class="dice" data-value="">
+                <!-- Точки будут добавляться динамически -->
+            </div>
+            
+            <button class="cyber-button roll-button">
+                <span class="button-content">Бросить кость</span>
+                <span class="button-glitch"></span>
+            </button>
+        </div>
+        
+        <div class="result-screen">
+            <div class="dice" data-value="">
+                <!-- Точки будут добавляться динамически -->
+            </div>
+            
+            <div class="answer"></div>
+            
+            <button class="cyber-button reset-button">
+                <span class="button-content">Бросить снова</span>
+                <span class="button-glitch"></span>
+            </button>
+        </div>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
