@@ -3,18 +3,24 @@ const Game = (() => {
         currentValue: 1,
         isRolling: false,
         answers: {
-            1: "Нет",
-            2: "Возможно",
-            3: "Скорее всего",
-            4: "Да",
-            5: "Определенно да",
-            6: "Да, и это очевидно"
+            1: "НЕТ",
+            2: "ВОЗМОЖНО",
+            3: "СКОРЕЕ ВСЕГО",
+            4: "ДА",
+            5: "ОПРЕДЕЛЕННО ДА",
+            6: "ДА, И ЭТО ОЧЕВИДНО"
         }
     };
 
     function init() {
         document.getElementById('roll-button').addEventListener('click', rollDice);
         document.getElementById('roll-again').addEventListener('click', resetGame);
+        
+        // Добавляем эффект глитча для текста
+        const glitchTexts = document.querySelectorAll('.glitch');
+        glitchTexts.forEach(text => {
+            text.setAttribute('data-text', text.textContent);
+        });
     }
 
     function rollDice() {
@@ -38,7 +44,7 @@ const Game = (() => {
             dice.setAttribute('data-value', newValue);
             state.currentValue = newValue;
             
-            // Показываем результат
+            // Показываем результат с эффектом глитча
             showResult();
             
             // Убираем анимацию
@@ -53,12 +59,18 @@ const Game = (() => {
         const resultScreen = document.querySelector('.result-screen');
         const answerText = document.getElementById('answer-text');
         
-        // Показываем ответ
+        // Показываем ответ с эффектом глитча
         answerText.textContent = state.answers[state.currentValue];
+        answerText.classList.add('cyber-text');
         
         // Анимируем переход
         welcomeScreen.classList.add('hidden');
         resultScreen.classList.remove('hidden');
+        
+        // Добавляем эффект глитча для ответа
+        setTimeout(() => {
+            answerText.classList.remove('cyber-text');
+        }, 2000);
     }
 
     function resetGame() {
