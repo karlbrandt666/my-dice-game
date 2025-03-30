@@ -1,0 +1,19 @@
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Файлы редактора
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Зависимости
+node_modules/
+
+# Логи
+*.log
+
+# Локальные файлы
+.env
+.env.local 

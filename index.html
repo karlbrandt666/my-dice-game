@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кости: Королевская битва</title>
+    <title>Кости: Средневековая таверна</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
@@ -11,8 +11,9 @@
     <!-- Приветственное окно -->
     <div id="welcome-modal" class="modal">
         <div class="modal-content">
-            <h2>🎲 Кости: Королевская битва 🎲</h2>
-            <p>Цель: Набрать больше очков, чем ИИ за 3 раунда!</p>
+            <h2>🎲 Кости: Средневековая таверна 🎲</h2>
+            <p>Добро пожаловать в таверну! Сыграем в кости?</p>
+            <p>У вас есть 1000 грошей. Делайте ставки и выигрывайте!</p>
             <button onclick="Game.start()">Начать игру</button>
             <button onclick="Game.toggleRules()">📖 Правила игры</button>
         </div>
@@ -21,7 +22,7 @@
     <!-- Игровой интерфейс -->
     <div id="game" class="hidden">
         <div class="header">
-            <h1>🎲 Кости: Королевская битва 🎲</h1>
+            <h1>🎲 Кости: Средневековая таверна 🎲</h1>
             <button class="rules-btn" onclick="Game.toggleRules()">📖 Правила</button>
         </div>
 
@@ -31,6 +32,7 @@
                 <h3>Правила игры</h3>
                 <ul>
                     <li>🎲 3 раунда по 3 броска в каждом</li>
+                    <li>💰 Делайте ставки перед началом раунда</li>
                     <li>✅ Выбирайте кости кликом для фиксации</li>
                     <li>💯 Комбинации дают бонусные очки:</li>
                     <li>1 → 100 | 5 → 50</li>
@@ -40,6 +42,7 @@
                     <li>4 одинаковых → 1000</li>
                     <li>5 одинаковых → 2000</li>
                     <li>6 одинаковых → 5000</li>
+                    <li>🎯 Победитель получает удвоенную ставку</li>
                 </ul>
                 <button onclick="Game.toggleRules()">Закрыть</button>
             </div>
@@ -50,6 +53,9 @@
             <div>Бросков осталось: <span id="rolls-left">3</span></div>
             <div>Ваши очки: <span id="player-score">0</span></div>
             <div>Очки ИИ: <span id="ai-score">0</span></div>
+            <div>Ваши гроши: <span id="player-money">1000</span></div>
+            <div>Гроши ИИ: <span id="ai-money">1000</span></div>
+            <div>Текущая ставка: <span id="current-bet">0</span></div>
         </div>
 
         <div class="dice-section">
@@ -58,7 +64,16 @@
             <div class="dice-container ai-dice" id="ai-dice"></div>
         </div>
 
-        <div class="controls">
+        <!-- Контролы для ставок -->
+        <div id="bet-controls" class="controls">
+            <button onclick="Game.placeBet(100)">100 грошей</button>
+            <button onclick="Game.placeBet(200)">200 грошей</button>
+            <button onclick="Game.placeBet(500)">500 грошей</button>
+            <button onclick="Game.placeBet(1000)">1000 грошей</button>
+        </div>
+
+        <!-- Игровые контролы -->
+        <div id="game-controls" class="controls hidden">
             <button id="roll-btn" onclick="Game.rollDice()">🎲 Бросить кости</button>
             <button id="end-btn" onclick="Game.endTurn()" disabled>⏹ Завершить ход</button>
         </div>
