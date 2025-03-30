@@ -638,3 +638,35 @@ h1 {
         margin-top: 1rem;
     }
 }
+
+.telegram-button {
+    background: linear-gradient(45deg, #0088cc, #00b4d8);
+    border: none;
+    margin-top: 1rem;
+    background-size: 200% 200%;
+    animation: gradientBG 3s ease infinite;
+}
+
+.telegram-button:hover {
+    background: linear-gradient(45deg, #00b4d8, #0088cc);
+    box-shadow: 0 0 20px #0088cc;
+}
+
+.telegram-button .button-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}

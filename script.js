@@ -29,6 +29,14 @@ const Game = {
         glitchTexts.forEach(text => {
             text.setAttribute('data-text', text.textContent);
         });
+
+        // Инициализация Telegram Web App
+        if (window.Telegram && window.Telegram.WebApp) {
+            const telegramButtons = document.querySelectorAll('.telegram-button');
+            telegramButtons.forEach(button => {
+                button.addEventListener('click', () => this.handleTelegramPayment());
+            });
+        }
     },
 
     rollDice() {
@@ -118,6 +126,30 @@ const Game = {
         // Возвращаемся к начальному экрану
         this.resultScreen.classList.remove('active');
         this.welcomeScreen.style.display = 'block';
+    },
+
+    handleTelegramPayment() {
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            
+            // Открываем окно оплаты звездами
+            tg.showPopup({
+                title: 'Поддержать приложение',
+                message: 'Выберите количество звезд для поддержки:',
+                buttons: [
+                    {id: '1', type: 'default', text: '⭐ 1 звезда'},
+                    {id: '5', type: 'default', text: '⭐⭐⭐⭐⭐ 5 звезд'},
+                    {id: '10', type: 'default', text: '⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ 10 звезд'},
+                    {id: 'cancel', type: 'cancel', text: 'Отмена'}
+                ]
+            }, (buttonId) => {
+                if (buttonId && buttonId !== 'cancel') {
+                    const stars = parseInt(buttonId);
+                    // Здесь можно добавить логику обработки платежа
+                    tg.showAlert(`Спасибо за ${stars} звезд!`);
+                }
+            });
+        }
     }
 };
 
