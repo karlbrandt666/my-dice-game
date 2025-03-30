@@ -35,7 +35,8 @@ const Tetris = (() => {
         isPaused: false,
         dropCounter: 0,
         dropInterval: 1000,
-        lastTime: 0
+        lastTime: 0,
+        isInitialized: false
     };
 
     // Инициализация канвасов
@@ -55,6 +56,7 @@ const Tetris = (() => {
 
     // Отрисовка фигуры
     function drawPiece(piece, x, y, context) {
+        if (!piece) return;
         piece.shape.forEach((row, i) => {
             row.forEach((value, j) => {
                 if (value) {
@@ -104,6 +106,7 @@ const Tetris = (() => {
 
     // Проверка коллизий
     function collision(x, y, piece) {
+        if (!piece) return true;
         return piece.shape.some((row, i) => {
             return row.some((value, j) => {
                 if (!value) return false;
@@ -121,6 +124,8 @@ const Tetris = (() => {
 
     // Слияние фигуры с доской
     function merge() {
+        if (!state.currentPiece) return;
+        
         state.currentPiece.shape.forEach((row, i) => {
             row.forEach((value, j) => {
                 if (value) {
@@ -158,7 +163,7 @@ const Tetris = (() => {
 
     // Движение фигуры
     function move(dx, dy) {
-        if (state.gameOver || state.isPaused) return;
+        if (state.gameOver || state.isPaused || !state.currentPiece) return false;
 
         const newX = state.currentX + dx;
         const newY = state.currentY + dy;
@@ -173,7 +178,7 @@ const Tetris = (() => {
 
     // Вращение фигуры
     function rotate() {
-        if (state.gameOver || state.isPaused) return;
+        if (state.gameOver || state.isPaused || !state.currentPiece) return;
 
         const rotated = state.currentPiece.shape[0].map((_, i) =>
             state.currentPiece.shape.map(row => row[i]).reverse()
@@ -237,23 +242,27 @@ const Tetris = (() => {
 
     // Управление игрой
     function start() {
-        if (state.gameOver) {
-            state = {
-                board: Array(ROWS).fill().map(() => Array(COLS).fill(0)),
-                currentPiece: createPiece(),
-                nextPiece: createPiece(),
-                currentX: Math.floor(COLS / 2) - Math.floor(state.currentPiece.shape[0].length / 2),
-                currentY: 0,
-                score: 0,
-                gameOver: false,
-                isPaused: false,
-                dropCounter: 0,
-                dropInterval: 1000,
-                lastTime: 0
-            };
-            document.getElementById('tetris-score').textContent = '0';
+        if (!state.isInitialized) {
+            initCanvas();
+            document.addEventListener('keydown', handleKeyPress);
+            state.isInitialized = true;
         }
-        state.isPaused = false;
+
+        state = {
+            board: Array(ROWS).fill().map(() => Array(COLS).fill(0)),
+            currentPiece: createPiece(),
+            nextPiece: createPiece(),
+            currentX: Math.floor(COLS / 2) - Math.floor(state.currentPiece.shape[0].length / 2),
+            currentY: 0,
+            score: 0,
+            gameOver: false,
+            isPaused: false,
+            dropCounter: 0,
+            dropInterval: 1000,
+            lastTime: 0,
+            isInitialized: true
+        };
+        document.getElementById('tetris-score').textContent = '0';
         update();
     }
 
@@ -263,8 +272,11 @@ const Tetris = (() => {
 
     // Инициализация
     function init() {
-        initCanvas();
-        document.addEventListener('keydown', handleKeyPress);
+        if (!state.isInitialized) {
+            initCanvas();
+            document.addEventListener('keydown', handleKeyPress);
+            state.isInitialized = true;
+        }
         start();
     }
 

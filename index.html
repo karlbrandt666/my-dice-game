@@ -17,9 +17,9 @@
             <h1>Добро пожаловать в таверну!</h1>
             <p>У вас есть 100 грошей. Сыграем в кости?</p>
             <div class="button-group">
-                <button onclick="Game.start()">Начать игру</button>
-                <button onclick="Game.toggleRules()">Правила</button>
-                <button onclick="Game.startTetris()" class="secret-button">Секретная игра</button>
+                <button id="start-game-btn">Начать игру</button>
+                <button id="rules-btn">Правила</button>
+                <button id="secret-game-btn" class="secret-button">Секретная игра</button>
             </div>
         </div>
     </div>
@@ -47,7 +47,7 @@
                     <li>Победитель забирает банк</li>
                 </ul>
             </div>
-            <button onclick="Game.toggleRules()">Закрыть</button>
+            <button id="close-rules-btn">Закрыть</button>
         </div>
     </div>
 
@@ -118,14 +118,14 @@
             <!-- Управление -->
             <div class="game-actions">
                 <div class="bet-actions">
-                    <button onclick="Game.placeBet(10)">Ставка 10</button>
-                    <button onclick="Game.placeBet(20)">Ставка 20</button>
-                    <button onclick="Game.placeBet(50)">Ставка 50</button>
+                    <button id="bet-10-btn">Ставка 10</button>
+                    <button id="bet-20-btn">Ставка 20</button>
+                    <button id="bet-50-btn">Ставка 50</button>
                 </div>
                 <div class="dice-actions">
-                    <button onclick="Game.rollDice()">Бросить кости</button>
-                    <button id="end-turn-btn" onclick="Game.endTurn()" disabled>Завершить ход</button>
-                    <button onclick="Game.raiseBet()">Повысить ставку</button>
+                    <button id="roll-dice-btn">Бросить кости</button>
+                    <button id="end-turn-btn" disabled>Завершить ход</button>
+                    <button id="raise-bet-btn">Повысить ставку</button>
                 </div>
             </div>
         </div>
@@ -146,9 +146,9 @@
                         <canvas id="next-piece-canvas"></canvas>
                     </div>
                     <div class="tetris-controls">
-                        <button onclick="Tetris.start()">Начать</button>
-                        <button onclick="Tetris.pause()">Пауза</button>
-                        <button onclick="Game.closeTetris()">Вернуться</button>
+                        <button id="tetris-start-btn">Начать</button>
+                        <button id="tetris-pause-btn">Пауза</button>
+                        <button id="tetris-close-btn">Вернуться</button>
                     </div>
                 </div>
             </div>
@@ -159,7 +159,7 @@
     <div id="result-modal" class="modal hidden">
         <div class="modal-content">
             <h2 id="result-text"></h2>
-            <button onclick="Game.reset()">Играть снова</button>
+            <button id="play-again-btn">Играть снова</button>
         </div>
     </div>
 

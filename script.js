@@ -40,9 +40,31 @@ const Game = (() => {
     ];
 
     function init() {
+        // Обработчики для главного меню
+        document.getElementById('start-game-btn').addEventListener('click', start);
+        document.getElementById('rules-btn').addEventListener('click', () => toggleRules());
+        document.getElementById('secret-game-btn').addEventListener('click', startTetris);
+        document.getElementById('close-rules-btn').addEventListener('click', () => toggleRules());
+        document.getElementById('play-again-btn').addEventListener('click', reset);
+
+        // Обработчики для игры в кости
+        document.getElementById('bet-10-btn').addEventListener('click', () => placeBet(10));
+        document.getElementById('bet-20-btn').addEventListener('click', () => placeBet(20));
+        document.getElementById('bet-50-btn').addEventListener('click', () => placeBet(50));
+        document.getElementById('roll-dice-btn').addEventListener('click', rollDice);
+        document.getElementById('end-turn-btn').addEventListener('click', endTurn);
+        document.getElementById('raise-bet-btn').addEventListener('click', raiseBet);
+
+        // Обработчики для Тетриса
+        document.getElementById('tetris-start-btn').addEventListener('click', () => Tetris.start());
+        document.getElementById('tetris-pause-btn').addEventListener('click', () => Tetris.pause());
+        document.getElementById('tetris-close-btn').addEventListener('click', closeTetris);
+
+        // Обработчик для костей игрока
         document.getElementById('player-dice').addEventListener('click', e => {
-            if (e.target.classList.contains('dice')) {
-                toggleDie(e.target.dataset.index);
+            const dice = e.target.closest('.dice');
+            if (dice) {
+                toggleDie(dice.dataset.index);
             }
         });
 
@@ -131,9 +153,11 @@ const Game = (() => {
         if (state.isAIThinking) return;
         const idx = state.players.human.selected.indexOf(+index);
         utils.playSound('select');
-        idx === -1 
-            ? state.players.human.selected.push(+index) 
-            : state.players.human.selected.splice(idx, 1);
+        if (idx === -1) {
+            state.players.human.selected.push(+index);
+        } else {
+            state.players.human.selected.splice(idx, 1);
+        }
         updateUI();
     }
 
