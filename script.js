@@ -64,8 +64,8 @@ const Game = (() => {
         document.getElementById('player-dice').addEventListener('click', e => {
             const dice = e.target.closest('.dice');
             if (dice) {
-                const index = dice.getAttribute('data-index');
-                if (index !== null) {
+                const index = parseInt(dice.getAttribute('data-index'));
+                if (!isNaN(index)) {
                     toggleDie(index);
                 }
             }
@@ -154,10 +154,10 @@ const Game = (() => {
 
     function toggleDie(index) {
         if (state.isAIThinking) return;
-        const idx = state.players.human.selected.indexOf(+index);
+        const idx = state.players.human.selected.indexOf(index);
         utils.playSound('select');
         if (idx === -1) {
-            state.players.human.selected.push(+index);
+            state.players.human.selected.push(index);
         } else {
             state.players.human.selected.splice(idx, 1);
         }

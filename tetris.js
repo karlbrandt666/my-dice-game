@@ -285,11 +285,14 @@ const Tetris = (() => {
 
     // Инициализация
     function init() {
-        if (!state.isInitialized) {
-            initCanvas();
-            document.addEventListener('keydown', handleKeyPress);
-            state.isInitialized = true;
-        }
+        // Инициализируем канвасы
+        initCanvas();
+        
+        // Добавляем обработчик клавиш
+        document.addEventListener('keydown', handleKeyPress);
+        state.isInitialized = true;
+        
+        // Запускаем игру
         start();
     }
 
