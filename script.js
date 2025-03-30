@@ -1,19 +1,22 @@
 const Game = (() => {
     const state = {
         players: {
-            human: { money: 100, score: 0, dice: [], selected: [] },
-            ai: { money: 100, score: 0, dice: [], selected: [] }
+            human: { money: 100, score: 0, dice: [], selected: [], streak: 0 },
+            ai: { money: 100, score: 0, dice: [], selected: [], streak: 0 }
         },
         currentBet: 0,
         pot: 0,
         isPlayerTurn: true,
         isAIThinking: false,
+        round: 1,
+        lastWinner: null,
         sounds: {
             dice: new Audio('sounds/dice-roll.mp3'),
             win: new Audio('sounds/win.mp3'),
             lose: new Audio('sounds/lose.mp3'),
             select: new Audio('sounds/select.mp3'),
-            bet: new Audio('sounds/bet.mp3')
+            bet: new Audio('sounds/bet.mp3'),
+            tavern: new Audio('sounds/tavern.mp3')
         }
     };
 
@@ -28,7 +31,12 @@ const Game = (() => {
             const counts = {};
             d.forEach(n => counts[n] = (counts[n] || 0) + 1);
             return Object.values(counts).includes(2) && Object.values(counts).includes(1);
-        }, value: 500 }
+        }, value: 500 },
+        { name: 'Двойная пара', check: d => {
+            const counts = {};
+            d.forEach(n => counts[n] = (counts[n] || 0) + 1);
+            return Object.values(counts).filter(v => v === 2).length === 2;
+        }, value: 300 }
     ];
 
     function init() {
@@ -37,12 +45,32 @@ const Game = (() => {
                 toggleDie(e.target.dataset.index);
             }
         });
+
+        // Добавляем эффект свечей
+        createCandleEffect();
+        
+        // Запускаем фоновую музыку таверны
+        state.sounds.tavern.loop = true;
+        state.sounds.tavern.volume = 0.3;
+        state.sounds.tavern.play().catch(() => {});
+    }
+
+    function createCandleEffect() {
+        const container = document.querySelector('.game-table');
+        for (let i = 0; i < 5; i++) {
+            const candle = document.createElement('div');
+            candle.className = 'candle';
+            candle.style.left = `${Math.random() * 100}%`;
+            candle.style.top = `${Math.random() * 100}%`;
+            container.appendChild(candle);
+        }
     }
 
     function start() {
         document.getElementById('welcome-modal').classList.add('hidden');
         document.getElementById('game').classList.remove('hidden');
         resetRound();
+        showStatus('Добро пожаловать в таверну!', '#ffd700');
     }
 
     function resetRound() {
@@ -195,17 +223,29 @@ const Game = (() => {
 
         if (humanScore > aiScore) {
             state.players.human.money += state.pot;
+            state.players.human.streak++;
+            state.players.ai.streak = 0;
+            state.lastWinner = 'human';
+            utils.animateWin();
+            utils.playSound('win');
             showResult('Победа!', '#4CAF50');
         } else if (humanScore < aiScore) {
             state.players.ai.money += state.pot;
+            state.players.ai.streak++;
+            state.players.human.streak = 0;
+            state.lastWinner = 'ai';
+            utils.animateLose();
+            utils.playSound('lose');
             showResult('Поражение!', '#ff4444');
         } else {
             state.players.human.money += state.pot / 2;
             state.players.ai.money += state.pot / 2;
+            state.lastWinner = null;
             showResult('Ничья!', '#ffc107');
         }
 
         updateUI();
+        state.round++;
     }
 
     function showResult(text, color) {
@@ -224,6 +264,10 @@ const Game = (() => {
     function reset() {
         state.players.human.money = 100;
         state.players.ai.money = 100;
+        state.players.human.streak = 0;
+        state.players.ai.streak = 0;
+        state.round = 1;
+        state.lastWinner = null;
         document.getElementById('result-modal').classList.add('hidden');
         start();
     }
@@ -235,6 +279,11 @@ const Game = (() => {
         document.getElementById('ai-score').textContent = state.players.ai.score;
         document.getElementById('current-pot').textContent = state.pot;
         document.getElementById('current-bet').textContent = state.currentBet;
+        document.getElementById('round').textContent = state.round;
+        
+        // Обновляем отображение серии побед
+        document.getElementById('player-streak').textContent = state.players.human.streak;
+        document.getElementById('ai-streak').textContent = state.players.ai.streak;
         
         const playerContainer = document.getElementById('player-dice');
         playerContainer.innerHTML = state.players.human.dice
