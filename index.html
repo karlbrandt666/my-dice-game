@@ -19,6 +19,7 @@
             <div class="button-group">
                 <button onclick="Game.start()">Начать игру</button>
                 <button onclick="Game.toggleRules()">Правила</button>
+                <button onclick="Game.startTetris()" class="secret-button">Секретная игра</button>
             </div>
         </div>
     </div>
@@ -130,6 +131,30 @@
         </div>
     </div>
 
+    <!-- Тетрис -->
+    <div id="tetris-modal" class="modal hidden">
+        <div class="modal-content tetris-content">
+            <div class="tetris-header">
+                <h2>Тетрис</h2>
+                <div class="tetris-score">Очки: <span id="tetris-score">0</span></div>
+            </div>
+            <div class="tetris-game">
+                <canvas id="tetris-canvas"></canvas>
+                <div class="tetris-sidebar">
+                    <div class="next-piece">
+                        <h3>Следующая фигура:</h3>
+                        <canvas id="next-piece-canvas"></canvas>
+                    </div>
+                    <div class="tetris-controls">
+                        <button onclick="Tetris.start()">Начать</button>
+                        <button onclick="Tetris.pause()">Пауза</button>
+                        <button onclick="Game.closeTetris()">Вернуться</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Результат игры -->
     <div id="result-modal" class="modal hidden">
         <div class="modal-content">
@@ -142,5 +167,6 @@
     <div id="status"></div>
 
     <script src="script.js"></script>
+    <script src="tetris.js"></script>
 </body>
 </html>

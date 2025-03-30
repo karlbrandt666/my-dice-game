@@ -334,6 +334,17 @@ const Game = (() => {
         }
     }
 
+    function startTetris() {
+        document.getElementById('welcome-modal').classList.add('hidden');
+        document.getElementById('tetris-modal').classList.remove('hidden');
+        Tetris.init();
+    }
+
+    function closeTetris() {
+        document.getElementById('tetris-modal').classList.add('hidden');
+        document.getElementById('welcome-modal').classList.remove('hidden');
+    }
+
     const utils = {
         playSound: (soundName) => {
             if (state.sounds[soundName]) {
@@ -380,6 +391,8 @@ const Game = (() => {
         placeBet,
         raiseBet,
         toggleRules,
+        startTetris,
+        closeTetris,
         init
     };
 })();

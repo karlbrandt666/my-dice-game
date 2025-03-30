@@ -782,3 +782,134 @@ button:active {
     0% { transform: scale(0.8) translateY(-20px); opacity: 0; }
     100% { transform: scale(1) translateY(0); opacity: 1; }
 }
+
+/* Секретная кнопка */
+.secret-button {
+    background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+    border: none;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    font-size: 0.9em;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.secret-button:hover {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 15px rgba(255,107,107,0.3);
+}
+
+/* Тетрис */
+.tetris-content {
+    max-width: 800px;
+    width: 90%;
+    background: var(--wood-color);
+    padding: 20px;
+    border-radius: 15px;
+    border: 3px solid var(--wood-light);
+}
+
+.tetris-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--wood-light);
+}
+
+.tetris-score {
+    font-size: 1.2em;
+    color: var(--gold-color);
+}
+
+.tetris-game {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+#tetris-canvas {
+    background: rgba(0,0,0,0.3);
+    border: 2px solid var(--wood-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.tetris-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 150px;
+}
+
+.next-piece {
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid var(--wood-light);
+    text-align: center;
+}
+
+.next-piece h3 {
+    margin: 0 0 10px 0;
+    color: var(--wood-light);
+}
+
+#next-piece-canvas {
+    background: rgba(0,0,0,0.3);
+    border: 2px solid var(--wood-light);
+    border-radius: 4px;
+}
+
+.tetris-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tetris-controls button {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9em;
+}
+
+/* Мобильная оптимизация для Тетриса */
+@media (max-width: 768px) {
+    .tetris-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .tetris-game {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tetris-sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .next-piece {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .tetris-controls {
+        flex: 1;
+    }
+
+    #tetris-canvas {
+        max-width: 100%;
+        height: auto;
+    }
+
+    #next-piece-canvas {
+        max-width: 100%;
+        height: auto;
+    }
+}
