@@ -6,167 +6,37 @@
     <meta name="theme-color" content="#1a0f0a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Кости: Таверна</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap">
+    <title>Кость Судьбы</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Playfair+Display:wght@400;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Приветственное окно -->
-    <div id="welcome-modal" class="modal">
-        <div class="modal-content">
-            <h1>Добро пожаловать в таверну!</h1>
-            <p>У вас есть 100 грошей. Сыграем в кости?</p>
-            <div class="button-group">
-                <button id="start-game-btn">Начать игру</button>
-                <button id="rules-btn">Правила</button>
-                <button id="secret-game-btn" class="secret-button">Секретная игра</button>
+    <div class="container">
+        <div class="welcome-screen">
+            <h1>Кость Судьбы</h1>
+            <p class="subtitle">Задайте вопрос в уме и бросьте кость</p>
+            <div class="dice-container">
+                <div class="dice" data-value="1">
+                    <div class="dot"></div>
+                </div>
             </div>
+            <button id="roll-button">Бросить кость</button>
+        </div>
+
+        <div class="result-screen hidden">
+            <div class="dice-result">
+                <div class="dice" data-value="1">
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="answer">
+                <h2>Ответ:</h2>
+                <p id="answer-text"></p>
+            </div>
+            <button id="roll-again">Бросить снова</button>
         </div>
     </div>
-
-    <!-- Правила игры -->
-    <div id="rules-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2>Правила игры</h2>
-            <div class="rules-scroll">
-                <ul>
-                    <li>У каждого игрока по 3 кости</li>
-                    <li>Сначала делается ставка</li>
-                    <li>Игроки по очереди бросают кости</li>
-                    <li>После броска можно выбрать кости для сохранения</li>
-                    <li>Комбинации:
-                        <ul>
-                            <li>Стрит (1-2-3 или 4-5-6) = 1000 очков</li>
-                            <li>Три одинаковых = значение × 100</li>
-                            <li>Фулл-хаус = 500 очков</li>
-                            <li>Двойная пара = 300 очков</li>
-                            <li>Сумма очков = сумма значений</li>
-                        </ul>
-                    </li>
-                    <li>Можно повышать ставку или завершить раунд</li>
-                    <li>Победитель забирает банк</li>
-                </ul>
-            </div>
-            <button id="close-rules-btn">Закрыть</button>
-        </div>
-    </div>
-
-    <!-- Игровой интерфейс -->
-    <div id="game" class="hidden">
-        <div class="game-table">
-            <div class="header">
-                <h1>Кости: Таверна</h1>
-                <div class="round-info">
-                    Раунд: <span id="round">1</span>
-                </div>
-            </div>
-
-            <!-- Информация об игроках -->
-            <div class="player-info">
-                <div class="player-section">
-                    <div class="section-label">Игрок</div>
-                    <div class="score-item">
-                        <span class="score-label">Гроши:</span>
-                        <span class="score-value" id="player-money">100</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="score-label">Очки:</span>
-                        <span class="score-value" id="player-score">0</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="score-label">Серия:</span>
-                        <span class="score-value" id="player-streak">0</span>
-                    </div>
-                </div>
-
-                <div class="player-section">
-                    <div class="section-label">ИИ</div>
-                    <div class="score-item">
-                        <span class="score-label">Гроши:</span>
-                        <span class="score-value" id="ai-money">100</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="score-label">Очки:</span>
-                        <span class="score-value" id="ai-score">0</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="score-label">Серия:</span>
-                        <span class="score-value" id="ai-streak">0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Центр стола -->
-            <div class="table-center">
-                <div class="pot">
-                    <div class="pot-label">Банк</div>
-                    <div class="pot-amount" id="current-pot">0</div>
-                </div>
-                <div class="current-bet">
-                    <div class="bet-label">Ставка</div>
-                    <div class="bet-amount" id="current-bet">0</div>
-                </div>
-            </div>
-
-            <!-- Кости -->
-            <div class="dice-section">
-                <div class="dice-container" id="ai-dice"></div>
-                <div class="vs-label">VS</div>
-                <div class="dice-container" id="player-dice"></div>
-            </div>
-
-            <!-- Управление -->
-            <div class="game-actions">
-                <div class="bet-actions">
-                    <button id="bet-10-btn">Ставка 10</button>
-                    <button id="bet-20-btn">Ставка 20</button>
-                    <button id="bet-50-btn">Ставка 50</button>
-                </div>
-                <div class="dice-actions">
-                    <button id="roll-dice-btn">Бросить кости</button>
-                    <button id="end-turn-btn" disabled>Завершить ход</button>
-                    <button id="raise-bet-btn">Повысить ставку</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Тетрис -->
-    <div id="tetris-modal" class="modal hidden">
-        <div class="modal-content tetris-content">
-            <div class="tetris-header">
-                <h2>Тетрис</h2>
-                <div class="tetris-score">Очки: <span id="tetris-score">0</span></div>
-            </div>
-            <div class="tetris-game">
-                <canvas id="tetris-canvas"></canvas>
-                <div class="tetris-sidebar">
-                    <div class="next-piece">
-                        <h3>Следующая фигура:</h3>
-                        <canvas id="next-piece-canvas"></canvas>
-                    </div>
-                    <div class="tetris-controls">
-                        <button id="tetris-start-btn">Начать</button>
-                        <button id="tetris-pause-btn">Пауза</button>
-                        <button id="tetris-close-btn">Вернуться</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Результат игры -->
-    <div id="result-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2 id="result-text"></h2>
-            <button id="play-again-btn">Играть снова</button>
-        </div>
-    </div>
-
-    <!-- Статус -->
-    <div id="status"></div>
 
     <script src="script.js"></script>
-    <script src="tetris.js"></script>
 </body>
 </html>
