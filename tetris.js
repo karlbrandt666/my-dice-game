@@ -36,7 +36,8 @@ const Tetris = (() => {
         dropCounter: 0,
         dropInterval: 1000,
         lastTime: 0,
-        isInitialized: false
+        isInitialized: false,
+        animationFrame: null
     };
 
     // Инициализация канвасов
@@ -212,7 +213,7 @@ const Tetris = (() => {
         drawNextPiece();
 
         if (!state.gameOver) {
-            requestAnimationFrame(update);
+            state.animationFrame = requestAnimationFrame(update);
         }
     }
 
@@ -242,12 +243,19 @@ const Tetris = (() => {
 
     // Управление игрой
     function start() {
+        // Отменяем предыдущую анимацию, если она есть
+        if (state.animationFrame) {
+            cancelAnimationFrame(state.animationFrame);
+        }
+
+        // Инициализируем канвасы, если нужно
         if (!state.isInitialized) {
             initCanvas();
             document.addEventListener('keydown', handleKeyPress);
             state.isInitialized = true;
         }
 
+        // Сбрасываем состояние игры
         state = {
             board: Array(ROWS).fill().map(() => Array(COLS).fill(0)),
             currentPiece: createPiece(),
@@ -260,14 +268,19 @@ const Tetris = (() => {
             dropCounter: 0,
             dropInterval: 1000,
             lastTime: 0,
-            isInitialized: true
+            isInitialized: true,
+            animationFrame: null
         };
+
         document.getElementById('tetris-score').textContent = '0';
         update();
     }
 
     function pause() {
         state.isPaused = !state.isPaused;
+        if (!state.isPaused) {
+            update();
+        }
     }
 
     // Инициализация

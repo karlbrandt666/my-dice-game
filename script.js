@@ -64,7 +64,10 @@ const Game = (() => {
         document.getElementById('player-dice').addEventListener('click', e => {
             const dice = e.target.closest('.dice');
             if (dice) {
-                toggleDie(dice.dataset.index);
+                const index = dice.getAttribute('data-index');
+                if (index !== null) {
+                    toggleDie(index);
+                }
             }
         });
 
