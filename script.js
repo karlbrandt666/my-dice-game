@@ -13,7 +13,8 @@ const Game = {
     },
 
     init() {
-        this.dice = document.querySelector('.dice');
+        this.dice = document.querySelector('.welcome-screen .dice');
+        this.resultDice = document.querySelector('.result-screen .dice');
         this.rollButton = document.querySelector('.roll-button');
         this.resetButton = document.querySelector('.reset-button');
         this.welcomeScreen = document.querySelector('.welcome-screen');
@@ -47,12 +48,14 @@ const Game = {
         this.dice.setAttribute('data-value', randomValue);
         
         // Создаем точки для кости
-        this.dice.innerHTML = '';
-        for (let i = 0; i < randomValue; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'dot';
-            this.dice.appendChild(dot);
-        }
+        this.dice.querySelectorAll('.dice-face').forEach(face => {
+            face.innerHTML = '';
+            for (let i = 0; i < randomValue; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                face.appendChild(dot);
+            }
+        });
         
         // Останавливаем анимацию и показываем результат
         setTimeout(() => {
@@ -65,6 +68,20 @@ const Game = {
         // Добавляем эффект глитча для ответа
         const answer = this.state.answers[this.state.currentValue];
         this.answerElement.textContent = answer;
+        
+        // Обновляем кость на экране результата
+        this.resultDice.setAttribute('data-value', this.state.currentValue);
+        this.resultDice.querySelectorAll('.dice-face').forEach(face => {
+            face.innerHTML = '';
+            for (let i = 0; i < this.state.currentValue; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                face.appendChild(dot);
+            }
+        });
+        
+        // Добавляем класс для анимации результата
+        this.resultDice.classList.add('result');
         
         // Показываем экран результата
         this.welcomeScreen.style.display = 'none';
@@ -84,9 +101,18 @@ const Game = {
         this.state.currentValue = null;
         this.state.isRolling = false;
         
-        // Сбрасываем отображение
-        this.dice.setAttribute('data-value', '');
-        this.dice.innerHTML = '';
+        // Сбрасываем отображение костей
+        [this.dice, this.resultDice].forEach(dice => {
+            dice.setAttribute('data-value', '');
+            dice.querySelectorAll('.dice-face').forEach(face => {
+                face.innerHTML = '';
+            });
+        });
+        
+        // Убираем классы анимации
+        this.resultDice.classList.remove('result');
+        
+        // Сбрасываем ответ
         this.answerElement.textContent = '';
         
         // Возвращаемся к начальному экрану
