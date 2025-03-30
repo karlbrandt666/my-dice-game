@@ -6,21 +6,20 @@
     <meta name="theme-color" content="#2c1810">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Кости: Средневековая таверна</title>
+    <title>Кости: Таверна</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 <body>
     <!-- Приветственное окно -->
     <div id="welcome-modal" class="modal">
         <div class="modal-content">
-            <h2>🎲 Кости: Средневековая таверна 🎲</h2>
+            <h2>🎲 Кости: Таверна</h2>
             <p>Добро пожаловать в таверну! Сыграем в кости?</p>
-            <p>У вас есть 1000 грошей. Делайте ставки и выигрывайте!</p>
+            <p>У вас есть 100 грошей. Делайте ставки и выигрывайте!</p>
             <div class="button-group">
                 <button onclick="Game.start()">Начать игру</button>
-                <button onclick="Game.toggleRules()">📖 Правила игры</button>
+                <button onclick="Game.toggleRules()">📖 Правила</button>
             </div>
         </div>
     </div>
@@ -28,7 +27,7 @@
     <!-- Игровой интерфейс -->
     <div id="game" class="hidden">
         <div class="header">
-            <h1>🎲 Кости: Средневековая таверна 🎲</h1>
+            <h1>🎲 Кости: Таверна</h1>
             <button class="rules-btn" onclick="Game.toggleRules()">📖</button>
         </div>
 
@@ -38,82 +37,64 @@
                 <h3>Правила игры</h3>
                 <div class="rules-scroll">
                     <ul>
-                        <li>🎲 3 раунда по 3 броска</li>
-                        <li>💰 Делайте ставки перед началом раунда</li>
-                        <li>✅ Выбирайте кости кликом для фиксации</li>
+                        <li>🎲 Игроки по очереди бросают кости</li>
+                        <li>💰 Можно делать ставки и повышать их</li>
+                        <li>✅ После броска можно зафиксировать кости</li>
                         <li>💯 Комбинации дают бонусные очки:</li>
-                        <li>1 → 100 | 5 → 50</li>
-                        <li>3 одинаковых → значение × 100</li>
-                        <li>Фулл-хаус (3+2) → 800</li>
-                        <li>Стрит (1-6) → 1500</li>
-                        <li>4 одинаковых → 1000</li>
-                        <li>5 одинаковых → 2000</li>
-                        <li>6 одинаковых → 5000</li>
-                        <li>🎯 Победитель получает удвоенную ставку</li>
+                        <li>Три одинаковых → значение × 100</li>
+                        <li>Стрит (1-2-3 или 4-5-6) → 1000</li>
+                        <li>Фулл-хаус (3+2) → 500</li>
+                        <li>🎯 Победитель получает все ставки</li>
                     </ul>
                 </div>
                 <button onclick="Game.toggleRules()">Закрыть</button>
             </div>
         </div>
 
-        <div id="scores">
-            <div class="score-item">
-                <span class="score-label">Раунд:</span>
-                <span class="score-value" id="round">1</span>/3
-            </div>
-            <div class="score-item">
-                <span class="score-label">Бросков:</span>
-                <span class="score-value" id="rolls-left">3</span>
-            </div>
-            <div class="score-item">
-                <span class="score-label">Ваши очки:</span>
-                <span class="score-value" id="player-score">0</span>
-            </div>
-            <div class="score-item">
-                <span class="score-label">Очки ИИ:</span>
-                <span class="score-value" id="ai-score">0</span>
-            </div>
-            <div class="score-item">
-                <span class="score-label">Ваши гроши:</span>
-                <span class="score-value" id="player-money">1000</span>
-            </div>
-            <div class="score-item">
-                <span class="score-label">Гроши ИИ:</span>
-                <span class="score-value" id="ai-money">1000</span>
-            </div>
-            <div class="score-item">
-                <span class="score-label">Ставка:</span>
-                <span class="score-value" id="current-bet">0</span>
-            </div>
-        </div>
-
-        <div class="dice-section">
-            <div class="player-section">
-                <div class="section-label">Ваши кости</div>
+        <!-- Игровой стол -->
+        <div class="game-table">
+            <div class="player-info">
+                <div class="player-stats">
+                    <div class="money">Гроши: <span id="player-money">100</span></div>
+                    <div class="score">Очки: <span id="player-score">0</span></div>
+                </div>
                 <div class="dice-container" id="player-dice"></div>
             </div>
-            <div class="vs-label">VS</div>
-            <div class="player-section">
-                <div class="section-label">Кости ИИ</div>
+
+            <div class="table-center">
+                <div class="pot">
+                    <div class="pot-label">Ставка</div>
+                    <div class="pot-amount" id="current-pot">0</div>
+                </div>
+                <div class="current-bet">
+                    <div class="bet-label">Текущая ставка</div>
+                    <div class="bet-amount" id="current-bet">0</div>
+                </div>
+            </div>
+
+            <div class="player-info">
+                <div class="player-stats">
+                    <div class="money">Гроши: <span id="ai-money">100</span></div>
+                    <div class="score">Очки: <span id="ai-score">0</span></div>
+                </div>
                 <div class="dice-container ai-dice" id="ai-dice"></div>
             </div>
         </div>
 
-        <!-- Контролы для ставок -->
-        <div id="bet-controls" class="controls">
-            <div class="bet-grid">
-                <button onclick="Game.placeBet(100)">100 💰</button>
-                <button onclick="Game.placeBet(200)">200 💰</button>
-                <button onclick="Game.placeBet(500)">500 💰</button>
-                <button onclick="Game.placeBet(1000)">1000 💰</button>
+        <!-- Игровые действия -->
+        <div class="game-actions">
+            <div class="bet-actions">
+                <button onclick="Game.placeBet(10)">10 💰</button>
+                <button onclick="Game.placeBet(20)">20 💰</button>
+                <button onclick="Game.placeBet(50)">50 💰</button>
+                <button onclick="Game.raiseBet()">Повысить ставку</button>
+            </div>
+            <div class="dice-actions">
+                <button id="roll-btn" onclick="Game.rollDice()">🎲 Бросить кости</button>
+                <button id="end-turn-btn" onclick="Game.endTurn()" disabled>⏹ Завершить ход</button>
             </div>
         </div>
 
-        <!-- Игровые контролы -->
-        <div id="game-controls" class="controls hidden">
-            <button id="roll-btn" onclick="Game.rollDice()">🎲 Бросить кости</button>
-            <button id="end-btn" onclick="Game.endTurn()" disabled>⏹ Завершить ход</button>
-        </div>
         <div id="status" class="status"></div>
     </div>
 
